@@ -26,11 +26,18 @@ class TaskTableView: UIView{
         return view
     }()
     
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        backgroundColor = .darkGray
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     weak var delegate: NewsCellDelegate? = nil
     
     override func layoutSubviews() {
-        backgroundColor = .darkGray
-        
         addSubview(taskTableView)
         taskTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
