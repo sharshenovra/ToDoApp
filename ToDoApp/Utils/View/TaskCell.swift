@@ -17,7 +17,6 @@ class TaskCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: "TaskCell")
-        backgroundColor = .gray
         
         selectionStyle = UITableViewCell.SelectionStyle.none
         accessoryType = isSelected ? .checkmark : .none

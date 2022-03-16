@@ -23,8 +23,10 @@ class MainView: UIViewController{
         return MainViewModel(delegate: self)
     }()
     
-    private lazy var taskTitle = CustomUILabel(fontSize: 30, title: "ToDo List")
-    private lazy var addButton = CustomButton(title: "Add Task")
+    private lazy var taskTitle = CustomUILabel(fontSize: 30, title: "ToDo List", alignment: .center)
+    private lazy var addButton = CustomButton(nameImage: "plus", color: .blue)
+    private lazy var deleteButton = CustomButton(nameImage: "trash", color: .blue)
+    private lazy var noTitle = CustomUILabel(fontSize: 20, title: "Nothing to view", alignment: .center)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +34,6 @@ class MainView: UIViewController{
         setupViews()
         
         setupConstraints()
-        setupMainWindow()
         
         viewModel.getTasks()
     }
@@ -47,19 +48,13 @@ class MainView: UIViewController{
         addButton.setOnClickListener { view in
             self.navigationController?.pushViewController(AddView(), animated: true)
         }
-    }
-    
-    private func setupMainWindow() {
-        view.backgroundColor = .darkGray
-    }
-    
-    func setupConstraints(){
-        
-        view.addSubview(addButton)
-        addButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeArea.top)
-            make.right.equalTo(view.safeArea.right).offset(-16)
+        deleteButton.setOnClickListener { view in
+            DataBase.shared.deleteAllHistory()
+            self.viewModel.getTasks()
         }
+    }
+  
+    func setupConstraints(){
         
         view.addSubview(taskTitle)
         taskTitle.snp.makeConstraints { make in
@@ -67,11 +62,38 @@ class MainView: UIViewController{
             make.centerX.equalToSuperview()
         }
         
+        view.addSubview(addButton)
+        addButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeArea.top)
+            make.right.equalTo(view.safeArea.right).offset(-16)
+            make.centerY.equalTo(taskTitle)
+            make.height.width.equalTo(24)
+        }
+        
+        view.addSubview(deleteButton)
+        deleteButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeArea.top)
+            make.right.equalTo(addButton.snp.left).offset(-16)
+            make.centerY.equalTo(taskTitle)
+            make.height.width.equalTo(24)
+        }
+        
+    }
+    
+    func addTableView(){
         view.addSubview(taskTableView)
         taskTableView.snp.makeConstraints { make in
             make.top.equalTo(taskTitle.snp.bottom)
             make.width.equalToSuperview()
             make.bottom.equalTo(view.safeArea.bottom)
+        }
+    }
+    
+    func addNoLabel(){
+        view.addSubview(noTitle)
+        noTitle.snp.makeConstraints { make in
+            make.top.equalTo(taskTitle.snp.bottom)
+            make.centerX.equalToSuperview()
         }
     }
     
@@ -81,7 +103,6 @@ class MainView: UIViewController{
 
 extension MainView: NewsCellDelegate {
     func onClick(model: TaskModel){
-        viewModel.selectTask(model: model)
         let vc = DetailView.newIntanse(delegate: self)
         vc.fillNews(model: model)
         present(vc, animated: true)
@@ -96,6 +117,13 @@ extension MainView: TaskSelectDelegate{
 
 extension MainView: MainDelegate {
     func showTasks(model: Results<TaskModel>) {
-        taskTableView.fill(models: model)
+        if model.count >= 1{
+            addTableView()
+            taskTableView.fill(models: model)
+            noTitle.removeFromSuperview()
+        }else{
+            taskTableView.removeFromSuperview()
+            addNoLabel()
+        }
     }
 }

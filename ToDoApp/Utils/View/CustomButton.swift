@@ -16,7 +16,7 @@ class CustomButton: UIButton {
         super.init(frame: .zero)
         
         setTitle(title, for: .normal)
-        setTitleColor(.white, for: .normal)
+        setTitleColor(.blue, for: .normal)
         titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
     }
     

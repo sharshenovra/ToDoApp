@@ -28,14 +28,9 @@ class DetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupMainWindow()
         setupViews()
 
         setupConstraints()
-    }
-    
-    private func setupMainWindow() {
-        view.backgroundColor = .darkGray
     }
     
     private func setupViews() {

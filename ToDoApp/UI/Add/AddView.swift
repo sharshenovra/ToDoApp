@@ -10,27 +10,27 @@ import SnapKit
 
 class AddView: UIViewController{
     
-    private lazy var backButton = CustomButton(title: "Back")
-    private lazy var mainTitle = CustomUILabel(fontSize: 30, title: "Add Task")
+    private lazy var backButton = CustomButton(nameImage: "chevron.left", color: .blue)
+    private lazy var mainTitle = CustomUILabel(fontSize: 30, title: "Add Task", alignment: .center)
     private lazy var taskTitle = CustomUILabel(fontSize: 20, title: "Task:")
     private lazy var taskField: UITextField = {
         let view = UITextField()
-        view.backgroundColor = .systemGray
         view.placeholder = "Enter task"
         view.delegate = self
+        view.backgroundColor = .systemGray5
+        view.layer.cornerRadius = 5
         return view
     }()
     private lazy var dateTitle = CustomUILabel(fontSize: 20, title: "Date:")
-    private lazy var dateField: UITextField = {
-        let view = UITextField()
-        view.backgroundColor = .systemGray
-        view.delegate = self
+    private lazy var dateField: UIView = {
+        let view = UIView()
         return view
     }()
     private lazy var descriptionTitle = CustomUILabel(fontSize: 20, title: "Description:")
     private lazy var descriptionField: UITextView = {
         let view = UITextView()
-        view.backgroundColor = .systemGray
+        view.backgroundColor = .systemGray5
+        view.layer.cornerRadius = 5
         return view
     }()
     
@@ -38,6 +38,7 @@ class AddView: UIViewController{
         let view = UIDatePicker()
         view.datePickerMode = .dateAndTime
         view.minimumDate = Date()
+        view.locale = Locale.init(identifier: "en")
         return view
     }()
     
@@ -45,9 +46,9 @@ class AddView: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .darkGray
         setupConstraints()
         setupViews()
+        view.backgroundColor = .systemBackground
     }
     
     func setupViews(){
@@ -55,8 +56,16 @@ class AddView: UIViewController{
             self.navigationController?.popToRootViewController(animated: true)
         }
         completeButton.setOnClickListener { view in
+            let dateFormatter = DateFormatter()
+
+            dateFormatter.dateStyle = .long
+            dateFormatter.timeStyle = .short
+
+            dateFormatter.locale = Locale(identifier: "en")
+
+            
             if self.taskField.text ?? "" != "" && self.descriptionField.text ?? "" != ""{
-                let model = TaskModel.createNewsModel(taskTitle: self.taskField.text ?? "", taskDate: self.datePicker.date.formatted() , taskDescription: self.descriptionField.text ?? "")
+                let model = TaskModel.createNewsModel(taskTitle: self.taskField.text ?? "", taskDate: dateFormatter.string(from: self.datePicker.date) , taskDescription: self.descriptionField.text ?? "")
                 DataBase.shared.saveTask(model: model)
                 self.navigationController?.popToRootViewController(animated: true)
             }else{
@@ -71,17 +80,19 @@ class AddView: UIViewController{
     
     func setupConstraints(){
         
-        view.addSubview(backButton)
-        backButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.top.equalTo(view.safeArea.top)
-        }
-        
         view.addSubview(mainTitle)
         mainTitle.snp.makeConstraints { make in
             make.top.equalTo(view.safeArea.top)
             make.centerX.equalToSuperview()
             make.height.equalTo(30)
+        }
+        
+        view.addSubview(backButton)
+        backButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.top.equalTo(view.safeArea.top)
+            make.centerY.equalTo(mainTitle)
+            make.height.width.equalTo(24)
         }
         
         view.addSubview(taskTitle)
@@ -110,7 +121,7 @@ class AddView: UIViewController{
         view.addSubview(dateField)
         dateField.snp.makeConstraints { make in
             make.top.equalTo(taskTitle.snp.bottom).offset(8)
-            make.left.equalTo(taskField.snp.right).offset(8)
+            make.left.equalTo(taskField.snp.right).offset(16)
             make.right.equalToSuperview().offset(-16)
             make.height.equalTo(24)
         }

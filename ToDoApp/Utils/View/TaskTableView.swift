@@ -16,19 +16,17 @@ protocol NewsCellDelegate: AnyObject{
 }
 
 class TaskTableView: UIView{
-
+    
     private lazy var taskTableView: UITableView = {
         let view = UITableView()
         view.delegate = self
         view.dataSource = self
-        view.backgroundColor = .darkGray
         view.register(TaskCell.self, forCellReuseIdentifier: "TaskCell")
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        backgroundColor = .darkGray
     }
     
     required init?(coder: NSCoder) {
@@ -75,11 +73,25 @@ extension TaskTableView: UITableViewDelegate, UITableViewDataSource {
         if let model = models?[indexPath.row] {
             cell.fill(model: model, number: indexPath.row + 1)
         }
-    
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if let model = models?[indexPath.row] {
+                DataBase.shared.deleteItem(model: model)
+                taskTableView.deleteRows(at: [indexPath], with: .fade)
+                taskTableView.reloadData()
+            }
+        }
     }
 }
