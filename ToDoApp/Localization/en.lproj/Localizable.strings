@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  ToDoApp
+
+  Created by Ruslan Sharshenov on 17/3/22.
+  
+*/
+
+"ToDo List" = "ToDo List";
+"Nothing to view" = "Nothing to view";
+"Add Task" = "Add Task";
+"Task:" = "Task:";
+"Enter task" = "Enter task";
+"Date:" = "Date:";
+"Description:" = "Description:";
+"Complete" = "Complete";
+"en" = "en";
+"Error" = "Error";
+"Enter data correctly" = "Enter data correctly";
+"Cancel" = "Cancel";
+"Choose language" = "Choose language";
+"English" = "English";
+"Russian" = "Russian";

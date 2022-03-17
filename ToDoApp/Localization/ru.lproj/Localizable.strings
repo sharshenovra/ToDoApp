@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  ToDoApp
+
+  Created by Ruslan Sharshenov on 17/3/22.
+  
+*/
+
+"ToDo List" = "Заметки";
+"Nothing to view" = "Нет данных для отображения";
+"Add Task" = "Добавить задачу";
+"Task:" = "Задача:";
+"Enter task" = "Введите задачу";
+"Date:" = "Дата:";
+"Description:" = "Описание:";
+"Complete" = "Завершить";
+"en" = "ru";
+"Error" = "Ошибка";
+"Enter data correctly" = "Введите данные правильно";
+"Cancel" = "Отмена";
+"Choose language" = "Выберите язык";
+"English" = "Английский";
+"Russian" = "Русский";

@@ -10,23 +10,23 @@ import SnapKit
 
 class AddView: UIViewController{
     
-    private lazy var backButton = CustomButton(nameImage: "chevron.left", color: .blue)
-    private lazy var mainTitle = CustomUILabel(fontSize: 30, title: "Add Task", alignment: .center)
-    private lazy var taskTitle = CustomUILabel(fontSize: 20, title: "Task:")
+    private lazy var backButton = CustomButton(nameImage: "chevron.left", color: .systemBlue)
+    private lazy var mainTitle = CustomUILabel(fontSize: 30, title: "Add Task".localized(), alignment: .center)
+    private lazy var taskTitle = CustomUILabel(fontSize: 20, title: "Task:".localized())
     private lazy var taskField: UITextField = {
         let view = UITextField()
-        view.placeholder = "Enter task"
+        view.placeholder = "Enter task".localized()
         view.delegate = self
         view.backgroundColor = .systemGray5
         view.layer.cornerRadius = 5
         return view
     }()
-    private lazy var dateTitle = CustomUILabel(fontSize: 20, title: "Date:")
+    private lazy var dateTitle = CustomUILabel(fontSize: 20, title: "Date:".localized())
     private lazy var dateField: UIView = {
         let view = UIView()
         return view
     }()
-    private lazy var descriptionTitle = CustomUILabel(fontSize: 20, title: "Description:")
+    private lazy var descriptionTitle = CustomUILabel(fontSize: 20, title: "Description:".localized())
     private lazy var descriptionField: UITextView = {
         let view = UITextView()
         view.backgroundColor = .systemGray5
@@ -42,7 +42,7 @@ class AddView: UIViewController{
         return view
     }()
     
-    private lazy var completeButton = CustomButton(title: "Complete")
+    private lazy var completeButton = CustomButton(title: "Complete".localized())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +61,7 @@ class AddView: UIViewController{
             dateFormatter.dateStyle = .long
             dateFormatter.timeStyle = .short
 
-            dateFormatter.locale = Locale(identifier: "en")
+            dateFormatter.locale = Locale(identifier: "en".localized())
 
             
             if self.taskField.text ?? "" != "" && self.descriptionField.text ?? "" != ""{
@@ -69,9 +69,9 @@ class AddView: UIViewController{
                 DataBase.shared.saveTask(model: model)
                 self.navigationController?.popToRootViewController(animated: true)
             }else{
-                let alert = UIAlertController(title: "Error", message: "Enter data correctly", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Error".localized(), message: "Enter data correctly".localized(), preferredStyle: .alert)
                
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil))
                 
                 self.present(alert, animated: true)
             }

@@ -17,19 +17,22 @@ protocol TaskSelectDelegate: AnyObject{
 class MainView: UIViewController{
     
     
-    private lazy var taskTableView = TaskTableView()
+    private var taskTableView = TaskTableView()
     
     private lazy var viewModel: MainViewModel = {
         return MainViewModel(delegate: self)
     }()
     
-    private lazy var taskTitle = CustomUILabel(fontSize: 30, title: "ToDo List", alignment: .center)
-    private lazy var addButton = CustomButton(nameImage: "plus", color: .blue)
-    private lazy var deleteButton = CustomButton(nameImage: "trash", color: .blue)
-    private lazy var noTitle = CustomUILabel(fontSize: 20, title: "Nothing to view", alignment: .center)
+    private var taskTitle = CustomUILabel(fontSize: 30, title: "ToDo List".localized(), alignment: .center)
+    private var addButton = CustomButton(nameImage: "plus", color: .systemBlue)
+    private var deleteButton = CustomButton(nameImage: "trash", color: .systemBlue)
+    private var noTitle = CustomUILabel(fontSize: 20, title: "Nothing to view".localized(), alignment: .center)
+    private var languageButton = CustomButton(nameImage: "globe", color: .systemBlue)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Bundle.setLanguage(lang: "\(UserDefaults.standard.string(forKey: "language") ?? "ru")")
         
         setupViews()
         
@@ -51,6 +54,9 @@ class MainView: UIViewController{
         deleteButton.setOnClickListener { view in
             DataBase.shared.deleteAllHistory()
             self.viewModel.getTasks()
+        }
+        languageButton.setOnClickListener { view in
+            self.navigationController?.pushViewController(SettingsView(), animated: true)
         }
     }
   
@@ -78,6 +84,14 @@ class MainView: UIViewController{
             make.height.width.equalTo(24)
         }
         
+        view.addSubview(languageButton)
+        languageButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeArea.top)
+            make.left.equalTo(view.safeArea.left).offset(16)
+            make.centerY.equalTo(taskTitle)
+            make.height.width.equalTo(24)
+        }
+        
     }
     
     func addTableView(){
@@ -92,7 +106,7 @@ class MainView: UIViewController{
     func addNoLabel(){
         view.addSubview(noTitle)
         noTitle.snp.makeConstraints { make in
-            make.top.equalTo(taskTitle.snp.bottom)
+            make.top.equalTo(taskTitle.snp.bottom).offset(30)
             make.centerX.equalToSuperview()
         }
     }
